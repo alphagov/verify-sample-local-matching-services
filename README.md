@@ -4,6 +4,8 @@
 
 A variety of example Local Matching Services for use with GOV.UK Verify
 
+**NOTE:** These are not intended for production use and have been written for learning and development of the Verify tech team.
+
 ## What is a Local Matching Service?
 
 There is [documentation about Local Matching Services](https://alphagov.github.io/rp-onboarding-tech-docs/pages/ms/ms.html) available
