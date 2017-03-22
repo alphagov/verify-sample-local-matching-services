@@ -12,7 +12,16 @@ There is [documentation about Local Matching Services](https://alphagov.github.i
 
 ## Tests
 
-There are some simple tests within this repository that can be used to test a Local Matching Services
+There are some simple tests within this repository that can be used to test a Local Matching Services.
+
+Run the tests as follows, replacing the URLs as appropriate for your test local matching service:
+
+```
+cd local-matching-service-tests
+mvn test -DMATCHING_URL=http://localhost:50139/ruby/matching-service -DUSER_ACCOUNT_CREATION_URL=http://localhost:50139/ruby/account-creation
+```
+
+Note: the tests are not representative of a real matching strategy
 
 ## Example implementations
 
