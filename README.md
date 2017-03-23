@@ -12,7 +12,7 @@ There is [documentation about Local Matching Services](https://alphagov.github.i
 
 ## Tests
 
-There are some simple tests within this repository that can be used to test a Local Matching Services.
+There are some simple tests within this repository that can be used to test a Local Matching Service.
 
 Run the tests as follows, replacing the URLs as appropriate for your test local matching service:
 
