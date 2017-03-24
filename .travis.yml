@@ -17,4 +17,3 @@ before_install:
   - mozroots --import --sync --url "http://hg.mozilla.org/releases/mozilla-release/raw-file/default/security/nss/lib/ckfw/builtins/certdata.txt"
 script:
   - ./pre-commit.sh
-  
