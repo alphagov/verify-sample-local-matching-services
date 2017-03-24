@@ -8,6 +8,9 @@ before_install:
   - sudo apt-get install maven
   # for the ruby lms
   - sudo apt-get install -y ruby bundler
+  # for the csharp lms
+  - wget -O csharp/nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
+  - sudo apt-get install mono-devel
 script:
-  - ./test_ruby.sh
+  - ./pre-commit.sh
   
