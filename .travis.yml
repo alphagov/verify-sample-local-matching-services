@@ -8,6 +8,10 @@ before_install:
   - sudo apt-get install maven
   # for the ruby lms
   - sudo apt-get install -y ruby bundler
+  # for the csharp lms
+  - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+  - echo "deb http://download.mono-project.com/repo/debian trusty main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
+  - sudo apt-get update
+  - sudo apt-get install mono-complete
 script:
-  - ./test_ruby.sh
-  
+  - ./pre-commit.sh
