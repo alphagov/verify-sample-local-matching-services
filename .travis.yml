@@ -14,6 +14,7 @@ before_install:
   # mono has no default cacerts, this imports the mozilla ones so it can connect to nuget
   # mozroots is unsupported and cert-sync should be used but that is not in
   # trusty.  Using download url from https://github.com/KSP-CKAN/CKAN/issues/1787#issuecomment-243217246
-  - mozroots --import --sync --url "http://hg.mozilla.org/releases/mozilla-release/raw-file/default/security/nss/lib/ckfw/builtins/certdata.txt"
+  - wget "http://hg.mozilla.org/releases/mozilla-release/raw-file/default/security/nss/lib/ckfw/builtins/certdata.txt"
+  - mozroots --import --sync --file certdata.txt
 script:
   - ./pre-commit.sh
