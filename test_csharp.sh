@@ -8,7 +8,7 @@ function cleanup() {
 cd "$(dirname "$0")"
 
 (cd csharp
- type nuget > /dev/null
+ type nuget 2&>1 /dev/null
  if [ $? -eq 0 ]; then
      nuget restore
  else
