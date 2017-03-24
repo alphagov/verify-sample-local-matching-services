@@ -9,12 +9,9 @@ before_install:
   # for the ruby lms
   - sudo apt-get install -y ruby bundler
   # for the csharp lms
-  - wget -O csharp/nuget.exe https://dist.nuget.org/win-x86-commandline/v4.0.0/nuget.exe
-  - sudo apt-get install mono-devel
-  # mono has no default cacerts, this imports the mozilla ones so it can connect to nuget
-  # mozroots is unsupported and cert-sync should be used but that is not in
-  # trusty.  Using download url from https://github.com/KSP-CKAN/CKAN/issues/1787#issuecomment-243217246
-  - wget "http://mxr.mozilla.org/seamonkey/source/security/nss/lib/ckfw/builtins/certdata.txt?raw=1"
-  - mozroots --import --sync --file certdata.txt
+  - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+  - echo "deb http://download.mono-project.com/repo/debian trusty main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
+  - sudo apt-get update
+  - sudo apt-get install mono-complete ca-certificates-mono nuget
 script:
   - ./pre-commit.sh
