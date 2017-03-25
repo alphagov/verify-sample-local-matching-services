@@ -26,6 +26,7 @@ Note: the tests are not representative of a real matching strategy
 ## Example implementations
 
 * [Ruby/Sinatra](./ruby/)
+* [C#/.NET Core](./csharp/)
 
 ## Running the tests
 

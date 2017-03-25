@@ -20,8 +20,7 @@ before_install:
   - export PATH="$PATH:~/.dotnet"
 
 script:
-  - ./test_ruby.sh
-  - ./test_csharp.sh
+  - ./pre-commit.sh
   
 cache:
   bundler: true
