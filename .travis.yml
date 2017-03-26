@@ -17,7 +17,14 @@ before_install:
   - curl -O https://cdn.rawgit.com/dotnet/cli/rel/1.0.1/scripts/obtain/dotnet-install.sh
   - chmod +x ./dotnet-install.sh
   - ./dotnet-install.sh --version 1.0.1 --no-path
-  - export PATH="$PATH:~/.dotnet"
+  - export PATH="$PATH:$HOME/.dotnet"
+
+  # for the haskell lms
+  - sudo apt-get install -y software-properties-common
+  - sudo add-apt-repository -y ppa:hvr/ghc
+  - sudo apt-get -qq update
+  - sudo apt-get install -y cabal-install-1.22 ghc-7.10.3
+  - export PATH="$PATH:$HOME/.cabal/bin:/opt/cabal/1.22/bin:/opt/ghc/7.10.3/bin"
 
 script:
   - ./pre-commit.sh
@@ -27,3 +34,5 @@ cache:
   directories:
     - $HOME/.m2
     - $HOME/.nuget/packages
+    - $HOME/.ghc
+    - $HOME/.cabal

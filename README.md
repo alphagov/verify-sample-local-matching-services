@@ -27,6 +27,7 @@ Note: the tests are not representative of a real matching strategy
 
 * [Ruby/Sinatra](./ruby/)
 * [C#/.NET Core](./csharp/)
+* [Haskell/Scotty](./haskell/)
 
 ## Running the tests
 

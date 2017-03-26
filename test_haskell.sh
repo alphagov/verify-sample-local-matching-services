@@ -15,6 +15,8 @@ function cleanup() {
 cd "$(dirname "$0")"
 
 (cd haskell
+ cabal update
+ cabal install
  cabal configure
  cabal build
  cabal run &
