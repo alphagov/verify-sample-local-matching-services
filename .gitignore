@@ -18,3 +18,8 @@ build
 *~
 target
 
+out
+bin
+obj
+packages
+
