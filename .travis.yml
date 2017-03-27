@@ -5,9 +5,25 @@ jdk:
   - oraclejdk8
 before_install:
   - sudo apt-get -qq update
+
+  # for the tests
   - sudo apt-get install maven
+
   # for the ruby lms
   - sudo apt-get install -y ruby bundler
+
+  # for the csharp lms
+  - sudo apt-get install libunwind8
+  - curl -O https://cdn.rawgit.com/dotnet/cli/rel/1.0.1/scripts/obtain/dotnet-install.sh
+  - chmod +x ./dotnet-install.sh
+  - ./dotnet-install.sh --version 1.0.1 --no-path
+  - export PATH="$PATH:~/.dotnet"
+
 script:
-  - ./test_ruby.sh
+  - ./pre-commit.sh
   
+cache:
+  bundler: true
+  directories:
+    - $HOME/.m2
+    - $HOME/.nuget/packages
