@@ -24,7 +24,7 @@ before_install:
   - echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
   - sudo apt-get update
   # mono has its own cacerts rather than using the system copy
-  - sudo apt-get install mono-complete ca-certificates-mono
+  - sudo apt-get install mono-complete ca-certificates-mono nuget
 
 script:
   - ./pre-commit.sh
