@@ -34,7 +34,7 @@ public class Cycle01LMSTest {
                 .post(Entity.json(matchingServiceRequestDto));
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
-        assertThat(response.getMediaType()).isEqualTo(MediaType.APPLICATION_JSON_TYPE);
+        assertThat(response.getMediaType().isCompatible(MediaType.APPLICATION_JSON_TYPE)).isTrue();
 
         MatchingResponseDto matchingResponseDto = response.readEntity(MatchingResponseDto.class);
 
@@ -55,7 +55,7 @@ public class Cycle01LMSTest {
                 .post(Entity.json(matchingServiceRequestDto));
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
-        assertThat(response.getMediaType()).isEqualTo(MediaType.APPLICATION_JSON_TYPE);
+        assertThat(response.getMediaType().isCompatible(MediaType.APPLICATION_JSON_TYPE)).isTrue();
 
         MatchingResponseDto matchingResponseDto = response.readEntity(MatchingResponseDto.class);
 
