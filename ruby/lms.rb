@@ -6,9 +6,17 @@ require 'json'
 set :server, 'webrick'
 set :port, 50139
 
-post '/ruby/matching-service', :provides => 'application/json' do
+def get_body(request)
+  encoding = request.env['HTTP_CONTENT_ENCODING']
   request.body.rewind
-  body = JSON.parse request.body.read
+  request_body = request.body.read
+  # deflate gzip body
+  request_body = Zlib::Inflate.new(window_bits=16+Zlib::MAX_WBITS).inflate(request_body).to_s if !encoding.nil? && encoding == 'gzip'
+  JSON.parse request_body
+end
+
+post '/ruby/matching-service', :provides => 'application/json' do
+  body = get_body(request)
 
   return JSON.generate({ result: "no-match" }) if body['levelOfAssurance'] != 'LEVEL_2'
 
@@ -22,8 +30,7 @@ post '/ruby/matching-service', :provides => 'application/json' do
 end
 
 post '/ruby/account-creation', :provides => 'application/json' do
-  request.body.rewind
-  body = JSON.parse request.body.read
+  body = get_body(request)
 
   return JSON.generate({ result: "failure" }) if body['hashedPid'] == 'failurePid'
 

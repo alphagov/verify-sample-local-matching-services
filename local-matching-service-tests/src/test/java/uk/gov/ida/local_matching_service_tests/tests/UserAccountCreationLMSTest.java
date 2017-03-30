@@ -31,7 +31,7 @@ public class UserAccountCreationLMSTest {
                 .post(Entity.json(userAccountCreationRequestDto));
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
-        assertThat(response.getMediaType()).isEqualTo(MediaType.APPLICATION_JSON_TYPE);
+        assertThat(response.getMediaType().isCompatible(MediaType.APPLICATION_JSON_TYPE)).isTrue();
 
         UserAccountCreationResponseDto userAccountCreationResponseDto = response.readEntity(UserAccountCreationResponseDto.class);
 
@@ -49,7 +49,7 @@ public class UserAccountCreationLMSTest {
                 .post(Entity.json(userAccountCreationRequestDto));
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
-        assertThat(response.getMediaType()).isEqualTo(MediaType.APPLICATION_JSON_TYPE);
+        assertThat(response.getMediaType().isCompatible(MediaType.APPLICATION_JSON_TYPE)).isTrue();
 
         UserAccountCreationResponseDto userAccountCreationResponseDto = response.readEntity(UserAccountCreationResponseDto.class);
 

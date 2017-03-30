@@ -1,4 +1,3 @@
-using csharp.Hacks;
 using Microsoft.AspNetCore.Mvc;
 
 namespace csharp.Controllers
@@ -27,7 +26,7 @@ namespace csharp.Controllers
 
         private dynamic MatchResponse(bool match) {
             var result = match ? "match" : "no-match";
-            return this.OverrideContentType(new { result });
+            return new { result };
         }
     }
 }

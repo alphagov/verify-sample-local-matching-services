@@ -1,4 +1,3 @@
-using csharp.Hacks;
 using Microsoft.AspNetCore.Mvc;
 
 namespace csharp.Controllers
@@ -10,7 +9,7 @@ namespace csharp.Controllers
         public dynamic Post([FromBody] dynamic body)
         {
             var result = body?.hashedPid == "failurePid" ?  "failure" : "success";
-            return this.OverrideContentType(new { result });
+            return new { result };
         }
     }
 }

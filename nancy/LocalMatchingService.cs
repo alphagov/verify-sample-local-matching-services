@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Json;
-using System.Runtime.Remoting.Messaging;
+using System.Linq;
 using Nancy;
 using Nancy.Hosting.Self;
-using Nancy.Routing;
 
 namespace lms
 {
@@ -20,11 +20,20 @@ namespace lms
 
     public class MatchingModule : NancyModule
     {
+        private Stream getStream(Request request)
+        {
+            if (request.Headers["Content-Encoding"] != null && request.Headers["Content-Encoding"].Contains("gzip"))
+            {
+                return new GZipStream(request.Body, CompressionMode.Decompress);
+            }
+            return request.Body;
+        }
+
         public MatchingModule()
         {
             Post("/nancy/matching-service", args =>
             {
-                var request = JsonValue.Load(Request.Body);
+                var request = JsonValue.Load(getStream(Request));
 
                 var noMatchResponse = new LMSResponse("no-match");
 
@@ -35,7 +44,7 @@ namespace lms
                     matchingResponse = noMatchResponse;
                 }
 
-                if (request["cycle3Dataset"] != null)
+                if (request.ContainsKey("cycle3Dataset") && request["cycle3Dataset"] != null)
                 {
                     if (request["cycle3Dataset"]["attributes"]["nino"] == "badvalue")
                     {
@@ -49,22 +58,18 @@ namespace lms
                 }
 
                 var response = Response.AsJson(matchingResponse);
-                //default content type used is application/json;charset=utf-8
-                response.ContentType = "application/json";
                 return response;
             });
 
             Post("/nancy/account-creation", args =>
             {
-                var request = JsonValue.Load(Request.Body);
+                var request = JsonValue.Load(getStream(Request));
 
                 var response = Response.AsJson(new LMSResponse("success"));
                 if ("failurePid".Equals(request["hashedPid"]))
                 {
                     response = Response.AsJson(new LMSResponse("failure"));
                 }
-                //default content type used is application/json;charset=utf-8
-                response.ContentType = "application/json";
                 return response;
             });
         }
