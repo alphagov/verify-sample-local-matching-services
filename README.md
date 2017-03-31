@@ -26,18 +26,16 @@ mvn test -DMATCHING_URL=http://localhost:50139/ruby/matching-service -DUSER_ACCO
 * the tests are not representative of a real matching strategy
 * older versions of the MSA send POSTs with gzip compressed JSON by default
 
-## Tests
+## Test cases
 
-| Matching Cycle   | Data to check                  | Expected Response |
-| ---------------- | ------------------------------ | ----------------- |
-| Cycle 0+1        | n/a                            | `match`           |
-| Cycle 0+1        | Surname[0] is "Griffin"        | `no-match`        |
-| Cycle 3          | "nino" is "goodvalue"          | `match`           |
-| Cycle 3          | "nino" is "badvalue"           | `no-match`        |
-| Account creation | PersistentId is "successPid" (see note) | `success`         |
-| Account creation | PersistentId is "failurePid" (see note) | `failure`         |
-
-**Note:** account creation is not expected to fail based on a PersistentId, but this allow deterministic testing
+| Matching Cycle   | Data to check               | Expected Response |
+| ---------------- | --------------------------- | ----------------- |
+| Cycle 0+1        | n/a                         | `no-match`        |
+| Cycle 0+1        | Surname[0] is "Griffin"     | `match`           |
+| Cycle 3          | "nino" is "knownValue"      | `match`           |
+| Cycle 3          | "nino" is "unknownValue"    | `no-match`        |
+| Account creation | levelOfAssurance is LEVEL_2 | `success`         |
+| Account creation | levelOfAssurance is LEVEL_1 | `failure`         |
 
 ## Example implementations
 

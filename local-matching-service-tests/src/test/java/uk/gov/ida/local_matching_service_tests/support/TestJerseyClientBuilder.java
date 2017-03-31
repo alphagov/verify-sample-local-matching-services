@@ -1,6 +1,7 @@
 package uk.gov.ida.local_matching_service_tests.support;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
@@ -15,7 +16,8 @@ public class TestJerseyClientBuilder {
     public static Client build() {
         ObjectMapper objectMapper = new ObjectMapper()
                 .registerModule(new Jdk8Module())
-                .registerModule(new JodaModule());
+                .registerModule(new JodaModule())
+                .setDateFormat(new ISO8601DateFormat());
         return JerseyClientBuilder.createClient().register(new JacksonJsonProvider(objectMapper));
     }
 

@@ -23,6 +23,7 @@ public class Cycle3LMSTest {
     @Test
     public void submitCycle3Request_expectingMatch() throws JsonProcessingException {
         MatchingServiceRequestDto matchingServiceRequestDto = aMatchingServiceRequestDto()
+                .withSurname("Frost")
                 .withCycle3Data("nino", "goodvalue")
                 .build();
 
@@ -44,7 +45,7 @@ public class Cycle3LMSTest {
     public void submitCycle3Request_expectingNoMatch() throws JsonProcessingException {
         MatchingServiceRequestDto matchingServiceRequestDto = aMatchingServiceRequestDto()
                 .withFirstname("Jack")
-                .withSurname("Griffin")
+                .withSurname("Frost")
                 .withCycle3Data("nino", "badvalue")
                 .build();
 
