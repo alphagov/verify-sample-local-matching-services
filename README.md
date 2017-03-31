@@ -32,8 +32,8 @@ mvn test -DMATCHING_URL=http://localhost:50139/ruby/matching-service -DUSER_ACCO
 | ---------------- | --------------------------- | ----------------- |
 | Cycle 0+1        | n/a                         | `no-match`        |
 | Cycle 0+1        | Surname[0] is "Griffin"     | `match`           |
-| Cycle 3          | "nino" is "knownValue"      | `match`           |
-| Cycle 3          | "nino" is "unknownValue"    | `no-match`        |
+| Cycle 3          | "nino" is "goodvalue"       | `match`           |
+| Cycle 3          | "nino" is "badvalue"        | `no-match`        |
 | Account creation | levelOfAssurance is LEVEL_2 | `success`         |
 | Account creation | levelOfAssurance is LEVEL_1 | `failure`         |
 
