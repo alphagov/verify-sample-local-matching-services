@@ -38,7 +38,7 @@ public class Cycle01LMSTest {
 
         MatchingResponseDto matchingResponseDto = response.readEntity(MatchingResponseDto.class);
 
-        assertThat(matchingResponseDto.getResult()).isEqualTo(MatchingResponseDto.MATCH);
+        assertThat(matchingResponseDto.getResult()).isEqualTo(MatchingResponseDto.NO_MATCH);
     }
 
     @Test
@@ -59,7 +59,7 @@ public class Cycle01LMSTest {
 
         MatchingResponseDto matchingResponseDto = response.readEntity(MatchingResponseDto.class);
 
-        assertThat(matchingResponseDto.getResult()).isEqualTo(MatchingResponseDto.NO_MATCH);
+        assertThat(matchingResponseDto.getResult()).isEqualTo(MatchingResponseDto.MATCH);
     }
 
 }
