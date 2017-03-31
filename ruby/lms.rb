@@ -21,12 +21,12 @@ post '/ruby/matching-service', :provides => 'application/json' do
   return JSON.generate({ result: "no-match" }) if body['levelOfAssurance'] != 'LEVEL_2'
 
   if !body['cycle3Dataset'].nil?
-    return JSON.generate({ result: "no-match" }) if body['cycle3Dataset']['attributes']['nino'] == 'badvalue'
+    return JSON.generate({ result: "match" }) if body['cycle3Dataset']['attributes']['nino'] == 'goodvalue'
   end
 
-  return JSON.generate({ result: "no-match" }) if body['matchingDataset']['surnames'][0]['value'] == 'Griffin'
+  return JSON.generate({ result: "match" }) if body['matchingDataset']['surnames'][0]['value'] == 'Griffin'
 
-  JSON.generate({ result: "match" })
+  JSON.generate({ result: "no-match" })
 end
 
 post '/ruby/account-creation', :provides => 'application/json' do
