@@ -32,7 +32,7 @@ end
 post '/ruby/account-creation', :provides => 'application/json' do
   body = get_body(request)
 
-  return JSON.generate({ result: "failure" }) if body['hashedPid'] == 'failurePid'
+  return JSON.generate({ result: "failure" }) if body['levelOfAssurance'] != 'LEVEL_2'
 
   JSON.generate({ result: "success" })
 end

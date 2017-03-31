@@ -11,5 +11,5 @@ routes = post "/haskell/account-creation" $ do
   req <- jsonData :: ActionM AccountCreationRequest
   setHeader "Content-Type" "application/json"
   case req of
-      AccountCreationRequest { hashedPid = "failurePid" } -> json failure
-      _                                                   -> json success
+      AccountCreationRequest { levelOfAssurance = "LEVEL_2" } -> json success
+      _                                                       -> json failure
