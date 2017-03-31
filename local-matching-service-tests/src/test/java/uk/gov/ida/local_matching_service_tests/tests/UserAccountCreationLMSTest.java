@@ -12,6 +12,8 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserAccountCreationLMSTest {
@@ -22,7 +24,7 @@ public class UserAccountCreationLMSTest {
 
     @Test
     public void submitUserAccountCreationRequest_expectingSuccess() throws JsonProcessingException {
-        UserAccountCreationRequestDto userAccountCreationRequestDto = new UserAccountCreationRequestDto("successPid", LevelOfAssuranceDto.LEVEL_2);
+        UserAccountCreationRequestDto userAccountCreationRequestDto = new UserAccountCreationRequestDto(UUID.randomUUID().toString(), LevelOfAssuranceDto.LEVEL_2);
 
         final Response response = client
                 .target(USER_ACCOUNT_CREATION_URL)
@@ -40,7 +42,7 @@ public class UserAccountCreationLMSTest {
 
     @Test
     public void submitUserAccountCreationRequest_expectingFailure() throws JsonProcessingException {
-        UserAccountCreationRequestDto userAccountCreationRequestDto = new UserAccountCreationRequestDto("failurePid", LevelOfAssuranceDto.LEVEL_2);
+        UserAccountCreationRequestDto userAccountCreationRequestDto = new UserAccountCreationRequestDto(UUID.randomUUID().toString(), LevelOfAssuranceDto.LEVEL_1);
 
         final Response response = client
                 .target(USER_ACCOUNT_CREATION_URL)

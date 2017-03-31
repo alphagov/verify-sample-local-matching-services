@@ -66,7 +66,7 @@ namespace lms
                 var request = JsonValue.Load(getStream(Request));
 
                 var response = Response.AsJson(new LMSResponse("success"));
-                if ("failurePid".Equals(request["hashedPid"]))
+                if (!"LEVEL_2".Equals(request["levelOfAssurance"]))
                 {
                     response = Response.AsJson(new LMSResponse("failure"));
                 }

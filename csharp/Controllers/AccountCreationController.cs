@@ -8,7 +8,7 @@ namespace csharp.Controllers
         [HttpPost]
         public dynamic Post([FromBody] dynamic body)
         {
-            var result = body?.hashedPid == "failurePid" ?  "failure" : "success";
+            var result = body?.levelOfAssurance == "LEVEL_2" ?  "success" : "failure";
             return new { result };
         }
     }
