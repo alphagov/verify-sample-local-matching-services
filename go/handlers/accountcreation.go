@@ -7,10 +7,12 @@ import (
 	"github.com/alphagov/verify-sample-local-matching-services/go"
 )
 
-func AccoutCreationHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("Starting AccoutCreationHandler")
+func AccountCreationHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println("Starting AccountCreationHandler")
 	w.Header().Set("Content-Type", "application/json")
+
 	decoder := json.NewDecoder(r.Body)
+
 	var t verify_lms.VerifyLMS
 	err := decoder.Decode(&t)
 	if err != nil {
