@@ -11,7 +11,7 @@ import (
 func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/matching-service", handlers.MatchingServiceHandler)
-	r.HandleFunc("/account-creation", handlers.AccoutCreationHandler)
+	r.HandleFunc("/account-creation", handlers.AccountCreationHandler)
 
 	srv := &http.Server{
 		Handler:      r,
