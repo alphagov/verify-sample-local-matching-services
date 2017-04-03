@@ -7,43 +7,51 @@
     [clojure.java.io :as io]
     [clojure.pprint :refer [pprint]]))
 
-; simple atom for exposing a global function so the server can close itself
-(def closer (atom nil))
-
 (def schema-file (io/file (io/resource "matching-request-schema.json")))
 
 (def matching-request-schema (-> schema-file slurp (cheshire/parse-string true) ->prismatic))
 
-(defn cycle3-match [matching-request]
-  (= "goodvalue" (get-in matching-request [:cycle3Dataset :attributes :nino])))
-
 (defn cycle01-match [matching-request]
   (= "Griffin" (get-in matching-request [:matchingDataset :surnames 0 :value])))
 
-(defn matching-service-fn [ctx]
+(defn cycle3-match [matching-request]
+  (= "goodvalue" (get-in matching-request [:cycle3Dataset :attributes :nino])))
+
+(defn matching-service-fn
+  "Given a request context, return an appropriate matching service result"
+  [ctx]
   (let [matching-request (get-in ctx [:parameters :body])]
     (cond
-      (not= "LEVEL_2" (:levelOfAssurance matching-request)) {:result "failure"}
+      (not= "LEVEL_2" (:levelOfAssurance matching-request)) {:result "no-match"} ;should this be "failure"?
       (cycle01-match matching-request) {:result "match"}
       (cycle3-match matching-request) {:result "match"}
       :else {:result "no-match"})))
 
-(defn account-creation-fn [ctx]
-  (let [matching-request (get-in ctx [:parameters :body])
-        loa (:levelOfAssurance matching-request)]
+(defn account-creation-fn
+  "Given a request context, return an appropriate account creation result"
+  [ctx]
+  (let [matching-request (get-in ctx [:parameters :body])]
     (cond
       (not= "LEVEL_2" (:levelOfAssurance matching-request)) {:result "failure"}
       (= "failurePid" (:hashedPid matching-request)) {:result "failure"}
       :else {:result "success"})))
 
-(defn as-json-post-resource [on-post-fn]
+(defn as-json-post-resource
+  "wrap a simple function for handling requests, as a resource that takes a simple JSON POST and returns JSON
+  This will also validate matching request schemas once I get that working"
+  [on-post-fn]
   (yada/resource
     {:methods {:post {:parameters {:body s/Any}             ;schema not yet working
                       :consumes   "application/json"
                       :produces   "application/json"
                       :response   on-post-fn}}}))
 
-(defn the-routes []
+(def web-server-closer
+  "this is storage for a function to close the current web server -
+  wrapped in an atom so it is globally accessible and settable"
+  (atom nil))
+
+(defn routes "returns http routes and their Yada resources" []
   ["/"
    {
     "healthcheck" (yada/as-resource {:alive :true})
@@ -54,13 +62,13 @@
                           {:delete
                            {:produces "text/plain"
                             :response (fn [_]
-                                        (future (Thread/sleep 20) (@closer))
+                                        (future (Thread/sleep 20) (@web-server-closer))
                                         "shutting down clojure server.")}}})}])
 
 (defn run-server-returning-promise []
-  (let [listener (yada/listener (the-routes) {:port 50139})
+  (let [listener (yada/listener (routes) {:port 50139})
         done-promise (promise)]
-    (reset! closer (fn []
+    (reset! web-server-closer (fn []
                      ((:close listener))
                      (deliver done-promise :done)
                      ))
@@ -76,5 +84,5 @@
          (def server-promise (run-server-returning-promise))
          "(you can deref this promise to wait for server exit)"
          "then close it with the DELETE hook above,"
-         "or close it by calling the closer:"
-         (@closer))
+         "or close it by calling the web-server-closer:"
+         (@web-server-closer))
