@@ -43,6 +43,7 @@ mvn test -DMATCHING_URL=http://localhost:50139/ruby/matching-service -DUSER_ACCO
 * [C#/.NET Core](./csharp/)
 * [C#/Mono/Nancy](./nancy/)
 * [Haskell/Scotty](./haskell/)
+* [Python](./python/)
 * [Clojure/yada](./clojure/yada/)
 
 ## Running the tests

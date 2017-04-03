@@ -1,0 +1,82 @@
+#!/usr/bin/env python
+
+from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+from cStringIO import StringIO
+from argparse import ArgumentParser
+import json
+
+
+class MatchingService(BaseHTTPRequestHandler):
+    def _set_headers(self):
+        '''Set the response headers for each request.'''
+        self.send_response(200)
+        self.send_header('Content-type', 'application/json')
+        self.end_headers()
+
+    def _handle_request(self, path, data):
+        '''Processes incoming requests based on `path`.'''
+        loa_create_account = {'LEVEL_2': 'success', 'LEVEL_1': 'failure'}
+        nino_match = {'goodvalue': 'match', 'badvalue': 'no-match'}
+
+        def matching(data):
+            '''Handles matching requests.'''
+            if data.get('cycle3Dataset', None):
+                # Cycle3 Matching
+                cycle3_attributes = data['cycle3Dataset']['attributes']
+
+                if 'nino' in cycle3_attributes:
+                    nino = cycle3_attributes['nino']
+                    result = nino_match[nino]
+                else:
+                    result = 'no-match'
+
+            else:
+                # Cycle0+1 Matching
+                matching_data = data['matchingDataset']
+                surnames = [s['value'] for s in matching_data['surnames']]
+
+                if surnames[0] == 'Griffin':
+                    result = 'match'
+                else:
+                    result = 'no-match'
+
+            return result
+
+        def creation(data):
+            '''Handles account creation requests.'''
+            loa = data['levelOfAssurance']
+            return loa_create_account[loa]
+
+        routes = {
+                '/matching-service': matching,
+                '/account-creation': creation
+                }
+
+        return routes[path](data)
+
+    def do_HEAD(self):
+        self._set_headers()
+
+    def do_POST(self):
+        self.data_string = self.rfile.read(int(self.headers['Content-Length']))
+        data = json.loads(self.data_string)
+        try:
+            result = self._handle_request(self.path, data)
+            f = StringIO(json.dumps({'result': result}))
+            self._set_headers()
+            self.wfile.write(f.read())
+        except KeyError as e:
+            print(e.message)
+            print(data)
+
+if __name__ == '__main__':
+    ap = ArgumentParser()
+    ap.add_argument('-p', '--port', help='Port to listen on', type=int, default=7878)
+    args = ap.parse_args()
+
+    try:
+        print('Running at http://localhost:{}/'.format(args.port))
+        httpd = HTTPServer(('', args.port), MatchingService)
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        print('Quitting.')
