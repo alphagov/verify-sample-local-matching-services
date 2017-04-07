@@ -11,13 +11,6 @@ before_install:
   # for the tests
   - sudo apt-get install maven
 
-  # for the csharp lms
-  - sudo apt-get install libunwind8
-  - curl -O https://cdn.rawgit.com/dotnet/cli/rel/1.0.1/scripts/obtain/dotnet-install.sh
-  - chmod +x ./dotnet-install.sh
-  - ./dotnet-install.sh --version 1.0.1 --no-path
-  - export PATH="$PATH:$HOME/.dotnet"
-
   # for the haskell lms
   - sudo apt-get install -y software-properties-common
   - sudo add-apt-repository -y ppa:hvr/ghc
