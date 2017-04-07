@@ -14,15 +14,15 @@ checkLevelOfAssurance nextCheck request = case request of
   _                                              -> json noMatch
 
 checkCycle3 :: MatchingRequestChecker
-checkCycle3 _         MatchingRequest { cycle3Dataset = Just (Cycle3Dataset (NinoAttribute "badvalue")) } = json noMatch
+checkCycle3 _         MatchingRequest { cycle3Dataset = Just (Cycle3Dataset (NinoAttribute "goodvalue")) } = json match
 checkCycle3 nextCheck request                                                                             = nextCheck request
 
 checkMatchingDataset :: MatchingRequestChecker
-checkMatchingDataset _         MatchingRequest { matchingDataset = MatchingDataset [MatchingDatasetString "Griffin"] } = json noMatch
+checkMatchingDataset _         MatchingRequest { matchingDataset = MatchingDataset [MatchingDatasetString "Griffin"] } = json match
 checkMatchingDataset nextCheck request                                                                                 = nextCheck request
 
 routes :: ScottyM ()
 routes = post "/haskell/matching-service" $ do
   req <- jsonData :: ActionM MatchingRequest
   setHeader "Content-Type" "application/json"
-  (checkLevelOfAssurance $ checkCycle3 $ checkMatchingDataset $ const $ json match) req
+  (checkLevelOfAssurance $ checkCycle3 $ checkMatchingDataset $ const $ json noMatch) req

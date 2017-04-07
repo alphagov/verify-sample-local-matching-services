@@ -1,31 +1,22 @@
 #!/usr/bin/env bash
+
 set -e
 
-function cleanup() {
-  pid="$(<./haskell/haskell_lms.pid)"
+lang="haskell"
+base="/${lang}"
+port=3000
 
-  # cabal run starts a child process, but neglects to kill it when it receives a SIGTERM
-  # explicitly kill its child processes first:
-  pkill -P $pid
-  kill $pid
-
-  rm -f ./haskell/haskell_lms.pid
+function cleanup {
+    docker stop verify_sample_lms_${lang}
+    docker rm -f verify_sample_lms_${lang}
 }
 
-cd "$(dirname "$0")"
-
-(cd haskell
- cabal update
- cabal install
- cabal configure
- cabal build
- cabal run &
- echo $! > haskell_lms.pid)
+docker build -t verify_sample_lms/${lang} ${lang}
+docker run -d --name verify_sample_lms_${lang} -p ${port}:${port} verify_sample_lms/${lang}
 
 trap cleanup EXIT
 
+cd "$(dirname "$0")"
+
 (cd local-matching-service-tests
-mvn test -DMATCHING_URL=http://localhost:3000/haskell/matching-service -DUSER_ACCOUNT_CREATION_URL=http://localhost:3000/haskell/account-creation)
-
-
-
+mvn test -DMATCHING_URL=http://localhost:${port}${base}/matching-service -DUSER_ACCOUNT_CREATION_URL=http://localhost:${port}${base}/account-creation)
