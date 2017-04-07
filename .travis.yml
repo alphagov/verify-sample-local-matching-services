@@ -11,9 +11,6 @@ before_install:
   # for the tests
   - sudo apt-get install maven
 
-  # for the ruby lms
-  - sudo apt-get install -y ruby bundler
-
   # for the csharp lms
   - sudo apt-get install libunwind8
   - curl -O https://cdn.rawgit.com/dotnet/cli/rel/1.0.1/scripts/obtain/dotnet-install.sh
