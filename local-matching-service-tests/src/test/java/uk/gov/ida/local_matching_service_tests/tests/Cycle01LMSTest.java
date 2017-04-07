@@ -21,7 +21,7 @@ public class Cycle01LMSTest {
     private Client client = TestJerseyClientBuilder.build();
 
     @Test
-    public void submitCycle01Request_expectingMatch() throws JsonProcessingException {
+    public void submitCycle01Request_expectingNoMatch() throws JsonProcessingException {
         MatchingServiceRequestDto matchingServiceRequestDto = aMatchingServiceRequestDto()
                 .withFirstname("Jack")
                 .withSurname("Frost")
@@ -42,7 +42,7 @@ public class Cycle01LMSTest {
     }
 
     @Test
-    public void submitCycle01Request_expectingNoMatch() throws JsonProcessingException {
+    public void submitCycle01Request_expectingMatch() throws JsonProcessingException {
         MatchingServiceRequestDto matchingServiceRequestDto = aMatchingServiceRequestDto()
                 .withFirstname("Jack")
                 .withSurname("Griffin")
