@@ -5,6 +5,7 @@ require 'json'
 
 set :server, 'webrick'
 set :port, 50139
+set :bind, '0.0.0.0'
 
 def get_body(request)
   encoding = request.env['HTTP_CONTENT_ENCODING']

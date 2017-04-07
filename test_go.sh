@@ -2,16 +2,20 @@
 
 set -e
 
+lang="go"
+base=""
+port=8080
+
 function cleanup {
-    docker stop verify_sample_lms_go
-    docker rm -f verify_sample_lms_go
+    docker stop verify_sample_lms_${lang}
+    docker rm -f verify_sample_lms_${lang}
 }
 
-docker build -t verify_sample_lms/go go
-docker run -d --name verify_sample_lms_go -p 8080:8080 verify_sample_lms/go
+docker build -t verify_sample_lms/${lang} ${lang}
+docker run -d --name verify_sample_lms_${lang} -p ${port}:${port} verify_sample_lms/${lang}
 
 trap cleanup EXIT
 
 (cd local-matching-service-tests
-mvn test -DMATCHING_URL=http://localhost:8080/matching-service -DUSER_ACCOUNT_CREATION_URL=http://localhost:8080/account-creation)
+mvn test -DMATCHING_URL=http://localhost:${port}${base}/matching-service -DUSER_ACCOUNT_CREATION_URL=http://localhost:${port}${base}/account-creation)
 
