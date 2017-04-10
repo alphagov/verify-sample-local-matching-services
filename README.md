@@ -45,8 +45,8 @@ mvn test -DMATCHING_URL=http://localhost:50139/ruby/matching-service -DUSER_ACCO
 * [Haskell/Scotty](./haskell/)
 * [Python](./python/)
 * [VisualBasic.NET/Mono](./visualbasic/)
+* [Clojure/yada](./clojure/yada/)
 
 ## Running the tests
 
 `./pre-commit.sh`
-
