@@ -1,22 +1,29 @@
 #!/usr/bin/env bash
 set -e
 
-function cleanup() {
+lang="yada"
+base=""
+port=50139
+
+function cleanup {
     curl http://localhost:50139/die -X delete
+    sleep 0.1
+    docker stop verify_sample_lms_${lang}
+    docker rm -f verify_sample_lms_${lang}
 }
 
-cd "$(dirname "$0")"
-
-(cd clojure/yada
- lein run > lein-run.out &
- echo "waiting for server"
- until $(curl --output /dev/null --silent --head --fail http://localhost:50139/healthcheck); do
-    printf '.'
-    sleep 0.5
- done
- echo $! > yada_lms.pid)
+docker build -t verify_sample_lms/${lang} clojure/${lang}
+docker run -d --name verify_sample_lms_${lang} -p ${port}:${port} verify_sample_lms/${lang}
 
 trap cleanup EXIT
 
+echo "waiting for server"
+until $(curl --output /dev/null --silent --head --fail http://localhost:50139/healthcheck); do
+   printf '.'
+   sleep 0.5
+done
+
+cd "$(dirname "$0")"
+
 (cd local-matching-service-tests
-mvn test -DMATCHING_URL=http://localhost:50139/matching-service -DUSER_ACCOUNT_CREATION_URL=http://localhost:50139/account-creation)
+mvn test -DMATCHING_URL=http://localhost:${port}${base}/matching-service -DUSER_ACCOUNT_CREATION_URL=http://localhost:${port}${base}/account-creation)
