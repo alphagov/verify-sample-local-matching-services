@@ -6,9 +6,10 @@
     [cheshire.core :as cheshire]
     [clojure.java.io :as io]
     [clojure.pprint :refer [pprint]]
-    [taoensso.timbre :as timbre]))
+    [taoensso.timbre :as timbre])
+    (:gen-class))
 
-(def schema-file (io/file (io/resource "matching-request-schema.json")))
+(def schema-file (io/resource "matching-request-schema.json"))
 
 (def matching-request-schema (-> schema-file slurp (cheshire/parse-string true) ->prismatic))
 
