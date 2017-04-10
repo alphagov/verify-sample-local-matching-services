@@ -7,4 +7,5 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [yada "1.2.1"]
                  [js-ps "0.1.4"]
-                 [cheshire "5.7.0"]])
+                 [cheshire "5.7.0"]
+                 [com.taoensso/timbre "4.8.0"]])
