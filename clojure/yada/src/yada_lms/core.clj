@@ -5,7 +5,8 @@
     [js-ps.core :refer [->prismatic]]
     [cheshire.core :as cheshire]
     [clojure.java.io :as io]
-    [clojure.pprint :refer [pprint]]))
+    [clojure.pprint :refer [pprint]]
+    [taoensso.timbre :as timbre]))
 
 (def schema-file (io/file (io/resource "matching-request-schema.json")))
 
@@ -21,27 +22,33 @@
   "Given a request context, return an appropriate matching service result"
   [ctx]
   (let [matching-request (get-in ctx [:parameters :body])]
-    (cond
-      (not= "LEVEL_2" (:levelOfAssurance matching-request)) {:result "no-match"} ;should this be "failure"?
-      (cycle01-match matching-request) {:result "match"}
-      (cycle3-match matching-request) {:result "match"}
-      :else {:result "no-match"})))
+    (timbre/debug "match request:" (select-keys (:request ctx) [:uri :query-string :request-method]))
+    (timbre/trace "match request payload:" matching-request)
+    (timbre/spy :debug "match result:"
+      (cond
+        (not= "LEVEL_2" (:levelOfAssurance matching-request)) {:result "no-match"} ;should this be "failure"?
+        (cycle01-match matching-request) {:result "match"}
+        (cycle3-match matching-request) {:result "match"}
+        :else {:result "no-match"}))))
 
 (defn account-creation-fn
   "Given a request context, return an appropriate account creation result"
   [ctx]
-  (let [matching-request (get-in ctx [:parameters :body])]
-    (cond
-      (not= "LEVEL_2" (:levelOfAssurance matching-request)) {:result "failure"}
-      (= "failurePid" (:hashedPid matching-request)) {:result "failure"}
-      :else {:result "success"})))
+  (let [account-creation-request (get-in ctx [:parameters :body])]
+    (timbre/debug "account creation request:" (select-keys (:request ctx) [:uri :query-string :request-method]))
+    (timbre/trace "account creation payload:" account-creation-request)
+    (timbre/spy :debug "account creation result:"
+      (cond
+        (not= "LEVEL_2" (:levelOfAssurance account-creation-request)) {:result "failure"}
+        (= "failurePid" (:hashedPid account-creation-request)) {:result "failure"}
+        :else {:result "success"}))))
 
 (defn as-json-post-resource
   "wrap a simple function for handling requests, as a resource that takes a simple JSON POST and returns JSON
-  This will also validate matching request schemas once I get that working"
-  [on-post-fn]
+  This will also validate matching request schemas against a specified schema"
+  [on-post-fn schema]
   (yada/resource
-    {:methods {:post {:parameters {:body s/Any}             ;schema not yet working
+    {:methods {:post {:parameters {:body schema}             ;schema not yet working
                       :consumes   "application/json"
                       :produces   "application/json"
                       :response   on-post-fn}}}))
@@ -55,8 +62,8 @@
   ["/"
    {
     "healthcheck" (yada/as-resource {:alive :true})
-    "matching-service" (as-json-post-resource matching-service-fn)
-    "account-creation" (as-json-post-resource account-creation-fn)
+    "matching-service" (as-json-post-resource matching-service-fn s/Any)
+    "account-creation" (as-json-post-resource account-creation-fn s/Any)
     "die"              (yada/resource
                          {:methods
                           {:delete
@@ -85,4 +92,9 @@
          "(you can deref this promise to wait for server exit)"
          "then close it with the DELETE hook above,"
          "or close it by calling the web-server-closer:"
-         (@web-server-closer))
+         (@web-server-closer)
+
+         "set log level:"
+         (timbre/merge-config! {:level :trace})
+         (timbre/merge-config! {:level :debug})
+         )
