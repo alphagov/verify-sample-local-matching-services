@@ -1,5 +1,7 @@
 sudo: required
 dist: trusty
+services:
+  - docker
 language: java
 jdk:
   - oraclejdk8
@@ -9,37 +11,20 @@ before_install:
   # for the tests
   - sudo apt-get install maven
 
-  # for the ruby lms
-  - sudo apt-get install -y ruby bundler
-
-  # for the csharp lms
-  - sudo apt-get install libunwind8
-  - curl -O https://cdn.rawgit.com/dotnet/cli/rel/1.0.1/scripts/obtain/dotnet-install.sh
-  - chmod +x ./dotnet-install.sh
-  - ./dotnet-install.sh --version 1.0.1 --no-path
-  - export PATH="$PATH:$HOME/.dotnet"
-
-  # for the haskell lms
-  - sudo apt-get install -y software-properties-common
-  - sudo add-apt-repository -y ppa:hvr/ghc
-  - sudo apt-get -qq update
-  - sudo apt-get install -y cabal-install-1.22 ghc-7.10.3
-  - export PATH="$PATH:$HOME/.cabal/bin:/opt/cabal/1.22/bin:/opt/ghc/7.10.3/bin"
-
-  # for the mono/nancy lms
-  - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
-  - echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
-  - sudo apt-get update
-  # mono has its own cacerts rather than using the system copy
-  - sudo apt-get install mono-complete ca-certificates-mono nuget
+  # Load cached docker images
+  - if [[ -d $HOME/docker ]]; then ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; fi
 
 script:
   - ./pre-commit.sh
-  
+
+before_cache:
+  # Save tagged docker images
+  - >
+    mkdir -p $HOME/docker && docker images -a --filter='dangling=false' --format '{{.Repository}}:{{.Tag}} {{.ID}}'
+    | xargs -n 2 -t sh -c 'test -e $HOME/docker/$1.tar.gz || docker save $0 | gzip -2 > $HOME/docker/$1.tar.gz'
+
 cache:
   bundler: true
   directories:
+    - $HOME/docker
     - $HOME/.m2
-    - $HOME/.nuget/packages
-    - $HOME/.ghc
-    - $HOME/.cabal

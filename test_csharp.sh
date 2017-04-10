@@ -2,32 +2,26 @@
 
 set -e
 
+lang="csharp"
+base="/${lang}"
+port=5000
+
 function cleanup {
-  pid="$(<./csharp/csharp.pid)"
-
-  # dotnet run starts a child process, but neglects to kill it when it receives a SIGTERM
-  # explicitly kill its child processes first:
-  pkill -P $pid
-  kill $pid
-
-  rm -f ./cshrp/csharp.pid
-  rm -f ./csharp/dotnet-run.out
+    docker stop verify_sample_lms_${lang}
+    docker rm -f verify_sample_lms_${lang}
 }
 
-cd "$(dirname "$0")"
-
-(
-cd csharp
-dotnet restore
-dotnet run > dotnet-run.out &
-echo $! > csharp.pid
-until grep -m 1 'Application started' dotnet-run.out; do sleep 0.1; done
-)
+docker build -t verify_sample_lms/${lang} ${lang}
+docker run -d --name verify_sample_lms_${lang} -p ${port}:${port} verify_sample_lms/${lang}
 
 trap cleanup EXIT
 
-(
-cd local-matching-service-tests
-mvn test -DMATCHING_URL=http://localhost:5000/csharp/matching-service -DUSER_ACCOUNT_CREATION_URL=http://localhost:5000/csharp/account-creation
-)
+cd "$(dirname "$0")"
+
+until docker logs verify_sample_lms_${lang} |grep -m 1 'Application started'; do sleep 0.5; done
+
+(cd local-matching-service-tests
+mvn test -DMATCHING_URL=http://localhost:${port}${base}/matching-service -DUSER_ACCOUNT_CREATION_URL=http://localhost:${port}${base}/account-creation)
+
+
 

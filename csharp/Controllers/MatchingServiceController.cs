@@ -13,15 +13,15 @@ namespace csharp.Controllers
             }
 
             var cycle3Dataset = body?.cycle3Dataset;
-            if (cycle3Dataset != null && cycle3Dataset.attributes?.nino == "badvalue") {
-                return MatchResponse(false);
+            if (cycle3Dataset != null && cycle3Dataset.attributes?.nino == "goodvalue") {
+                return MatchResponse(true);
             }
 
             if (body?.matchingDataset?.surnames?[0]?.value == "Griffin") {
-                return MatchResponse(false);
+                return MatchResponse(true);
             }
 
-            return MatchResponse(true);
+            return MatchResponse(false);
         }
 
         private dynamic MatchResponse(bool match) {

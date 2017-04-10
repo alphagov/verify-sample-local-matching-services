@@ -39,25 +39,27 @@ namespace lms
 
                 var matchingResponse = new LMSResponse("match");
 
+                var returnResponse = noMatchResponse;
+
                 if (request["levelOfAssurance"] != "LEVEL_2")
                 {
-                    matchingResponse = noMatchResponse;
+                    returnResponse = noMatchResponse;
                 }
 
                 if (request.ContainsKey("cycle3Dataset") && request["cycle3Dataset"] != null)
                 {
-                    if (request["cycle3Dataset"]["attributes"]["nino"] == "badvalue")
+                    if (request["cycle3Dataset"]["attributes"]["nino"] == "goodvalue")
                     {
-                        matchingResponse = noMatchResponse;
+                        returnResponse = matchingResponse;
                     }
                 }
 
                 if (request["matchingDataset"]["surnames"][0]["value"] == "Griffin")
                 {
-                    matchingResponse = noMatchResponse;
+                    returnResponse = matchingResponse;
                 }
 
-                var response = Response.AsJson(matchingResponse);
+                var response = Response.AsJson(returnResponse);
                 return response;
             });
 
