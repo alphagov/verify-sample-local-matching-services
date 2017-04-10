@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 set -e
 
-./test_go.sh
-./test_ruby.sh
-./test_csharp.sh
-./test_nancy.sh
-./test_haskell.sh
-./test_python.sh
-./test_visualbasic.sh
+./go/test.sh
+./ruby/test.sh
+./csharp/test.sh
+./nancy/test.sh
+./haskell/test.sh
+./python/test.sh
+./visualbasic/test.sh
 
 echo "SUCCESS!"
