@@ -8,5 +8,6 @@ set -e
 ./haskell/test.sh
 ./python/test.sh
 ./visualbasic/test.sh
+./clojure/yada/test.sh
 
 echo "SUCCESS!"
