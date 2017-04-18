@@ -7,6 +7,7 @@ set -e
 ./nancy/test.sh
 ./haskell/test.sh
 ./python/test.sh
+./flask/test.sh
 ./visualbasic/test.sh
 ./clojure/yada/test.sh
 
