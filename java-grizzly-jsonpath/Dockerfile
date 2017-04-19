@@ -11,6 +11,10 @@ ENV PATH $PATH:$JAVA_HOME:$JAVA:$M2_HOME:$M2
 
 WORKDIR /usr/src/java-grizzly-jsonpath/
 
+#https://keyholesoftware.com/2015/01/05/caching-for-maven-docker-builds/
+ADD pom.xml /usr/src/java-grizzly-jsonpath/
+RUN mvn verify clean --fail-never
+
 COPY ./ /usr/src/java-grizzly-jsonpath/
 
 RUN mvn clean package
