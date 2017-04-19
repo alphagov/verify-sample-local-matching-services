@@ -8,9 +8,11 @@ import java.io.IOException;
 import java.net.URI;
 
 public class Main {
+    private static final String ENV_HOST = System.getenv("JGS_HOST");
     private static final String ENV_PORT = System.getenv("JGS_PORT");
+    private static final String HOST = ENV_HOST == null ? "localhost" : ENV_HOST;
     private static final String PORT = ENV_PORT == null ? "8080" : ENV_PORT;
-    private static final String BASE_URI = "http://localhost:" + PORT + "/";
+    private static final String BASE_URI = "http://" + HOST + ":" + PORT + "/";
 
     public static HttpServer startServer(String uri) {
         final ResourceConfig rc = new ResourceConfig().packages("uk.gov.ida");
