@@ -25,6 +25,6 @@ packages
 
 \#*\#
 
-java-grizzly-jsonpath/.settings/*
+java/grizzly-jsonpath/.settings/*
 local-matching-service-tests/.settings/*
 .metadata

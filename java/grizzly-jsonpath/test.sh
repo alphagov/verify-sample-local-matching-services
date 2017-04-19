@@ -17,5 +17,5 @@ docker run -d --name verify_sample_lms_${lang} -p ${port}:${port} verify_sample_
 
 trap cleanup EXIT
 
-(cd ../local-matching-service-tests
+(cd ../../local-matching-service-tests
 mvn test -DMATCHING_URL=http://localhost:${port}${base}/matching-service -DUSER_ACCOUNT_CREATION_URL=http://localhost:${port}${base}/account-creation)
