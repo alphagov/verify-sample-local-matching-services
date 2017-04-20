@@ -24,3 +24,7 @@ obj
 packages
 
 \#*\#
+
+java/grizzly-jsonpath/.settings/*
+local-matching-service-tests/.settings/*
+.metadata

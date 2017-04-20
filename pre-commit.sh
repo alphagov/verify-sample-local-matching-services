@@ -10,5 +10,6 @@ set -e
 ./flask/test.sh
 ./visualbasic/test.sh
 ./clojure/yada/test.sh
+./java/grizzly-jsonpath/test.sh
 
 echo "SUCCESS!"
