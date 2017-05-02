@@ -47,6 +47,7 @@ mvn test -DMATCHING_URL=http://localhost:50139/ruby/matching-service -DUSER_ACCO
 * [Python/Flask](./flask/)
 * [VisualBasic.NET/Mono](./visualbasic/)
 * [Clojure/yada](./clojure/yada/)
+* [Node.js](./nodejs/)
 
 ## Running the tests
 
