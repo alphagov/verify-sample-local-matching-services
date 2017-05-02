@@ -14,7 +14,7 @@ function cleanup {
 cd "$(dirname "$0")"
 
 docker build -t verify_sample_lms/${lang} .
-docker run -d --name verify_sample_lms_${lang} -p ${port}:${port} verify_sample_lms/${lang}
+docker run -d --name verify_sample_lms_${lang} -p ${port}:${port} -v ~/.cabal/:/root/.cabal/ verify_sample_lms/${lang}
 
 trap cleanup EXIT
 
