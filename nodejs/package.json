@@ -1,0 +1,16 @@
+{
+  "name": "lms",
+  "description": "An example Local Matching Service for GOV.UK Verify, written in Node.js",
+  "license": "MIT",
+  "repository": "https://github.com/alphagov/verify-sample-local-matching-services/",
+  "devDependencies": {
+    "standard": "latest",
+    "jest": "latest"
+  },
+  "scripts": {
+    "test": "standard && jest"
+  },
+  "standard": {
+    "globals": [ "describe", "expect", "test" ]
+  }
+}

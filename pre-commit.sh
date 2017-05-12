@@ -11,5 +11,6 @@ set -e
 ./visualbasic/test.sh
 ./clojure/yada/test.sh
 ./java/grizzly-jsonpath/test.sh
+./nodejs/test.sh
 
 echo "SUCCESS!"
